@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+class TVProgram {
+    private String channel;
+    private String dayOfWeek;
+    private String genre;
+    private String startTime;
+
+    public TVProgram(String channel, String dayOfWeek, String genre, String startTime) {
+        this.channel = channel;
+        this.dayOfWeek = dayOfWeek;
+        this.genre = genre;
+        this.startTime = startTime;
+    }
+
+}
+
+public class TVScheduleManager {
+    private Map<String, List<TVProgram>> schedule;
+
+    public TVScheduleManager() {
+        this.schedule = new HashMap<>();
+    }
+
+    public void addProgram(String dayOfWeek, TVProgram program) {
+        if (schedule.containsKey(dayOfWeek)) {
+            schedule.get(dayOfWeek).add(program);
+        } else {
+            List<TVProgram> programs = new ArrayList<>();
+            programs.add(program);
+            schedule.put(dayOfWeek, programs);
+        }
+    }
+
+    public void removeProgram(String dayOfWeek, TVProgram program) {
+        if (schedule.containsKey(dayOfWeek)) {
+            schedule.get(dayOfWeek).remove(program);
+        }
+    }
+
+    public void editProgram(String dayOfWeek, TVProgram oldProgram, TVProgram newProgram) {
+        List<TVProgram> programs = schedule.get(dayOfWeek);
+        if (programs != null && programs.contains(oldProgram)) {
+            int index = programs.indexOf(oldProgram);
+            programs.set(index, newProgram);
+        }
+    }
+
+    public static void main(String[] args) {
+        TVScheduleManager scheduleManager = new TVScheduleManager();
+
+        // Добавление программ
+        TVProgram program1 = new TVProgram("Channel 1", "Monday", "Movie", "20:00");
+        scheduleManager.addProgram("Monday", program1);
+
+        // Удаление программ
+        scheduleManager.removeProgram("Monday", program1);
+
+        // Редактирование программ
+        TVProgram oldProgram = new TVProgram("Channel 2", "Tuesday", "Documentary", "19:00");
+        TVProgram newProgram = new TVProgram("Channel 2", "Tuesday", "News", "19:00");
+        scheduleManager.editProgram("Tuesday", oldProgram, newProgram);
+    }
+}
